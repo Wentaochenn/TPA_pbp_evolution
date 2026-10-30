@@ -1,0 +1,6 @@
+name: pbp_structure_render
+channels:
+  - https://conda.anaconda.org/conda-forge
+dependencies:
+  - python=3.11
+  - pymol-open-source=3.1.0

@@ -1,0 +1,8 @@
+name: pbp_bbmap_runtime
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - bbmap=39.81
+  - openjdk=17
+  - pigz

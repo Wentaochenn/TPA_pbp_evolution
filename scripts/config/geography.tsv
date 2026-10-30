@@ -1,0 +1,32 @@
+Geo_Country	region	long	lat	manual_long	manual_lat	coordinate_source	map_status	continent
+Argentina	Argentina	-63.622407913208	-38.4173336029053	NA	NA	maps_centroid	mapped	S.America
+Australia	Australia	135.933540344238	-32.4004878997803	NA	NA	maps_centroid	mapped	Oceania
+Austria	Austria	13.335693359375	47.7004146575928	NA	NA	maps_centroid	mapped	Europe
+Brazil	Brazil	-54.4037609100342	-14.2421143054962	NA	NA	maps_centroid	mapped	S.America
+Canada	Canada	-96.8279075622559	62.3954830169678	NA	NA	maps_centroid	mapped	N.America
+China	China	104.179828643799	35.8869380950928	NA	NA	maps_centroid	mapped	Asia
+Colombia	Colombia	-72.9507331848145	4.09921860694885	NA	NA	maps_centroid	mapped	S.America
+Cuba	Cuba	-79.5120086669922	21.52294921875	NA	NA	maps_centroid	mapped	Caribbean
+Czech_Republic	Czech Republic	15.4609861373901	49.8070068359375	NA	NA	maps_centroid	mapped	Europe
+France	France	2.39697241783142	46.2410144805908	NA	NA	maps_centroid	mapped	Europe
+Haiti	Haiti	-73.0617179870605	19.0664052963257	-72.3	19	maps_centroid	mapped	Caribbean
+Hungary	Hungary	19.48486328125	47.1532459259033	NA	NA	maps_centroid	mapped	Europe
+Ireland	Ireland	-8.20881342887878	53.4197750091553	NA	NA	maps_centroid	mapped	Europe
+Italy	Italy	12.5567872524261	41.8849868774414	NA	NA	maps_centroid	mapped	Europe
+Japan	Japan	134.756393432617	34.8877925872803	NA	NA	maps_centroid	mapped	Asia
+Madagascar	Madagascar	46.8699207305908	-18.8250484466553	NA	NA	maps_centroid	mapped	Africa
+Malawi	Malawi	34.2815914154053	-13.2630376815796	NA	NA	maps_centroid	mapped	Africa
+Mexico	Mexico	-102.548828125	23.63037109375	NA	NA	maps_centroid	mapped	N.America
+Netherlands	Netherlands	5.27368152141571	52.1327133178711	NA	NA	maps_centroid	mapped	Europe
+Peru	Peru	-75.0109367370605	-9.19367692433298	NA	NA	maps_centroid	mapped	S.America
+Portugal	Portugal	-7.84611821174622	39.5714111328125	NA	NA	maps_centroid	mapped	Europe
+Russia	Russia	104.93761920929	61.5267314910889	NA	NA	maps_centroid	mapped	Asia
+South_Africa	South Africa	27.1676263809204	-34.5545902252197	NA	NA	maps_centroid	mapped	Africa
+Spain	Spain	-2.45678758621216	39.8952388763428	NA	NA	maps_centroid	mapped	Europe
+Sri_Lanka	Sri Lanka	80.7923851013184	7.88103032112122	80.7	7.9	maps_centroid	mapped	Asia
+Sweden	Sweden	17.6513185501099	62.1916255950928	NA	NA	maps_centroid	mapped	Europe
+Switzerland	Switzerland	8.21230459213257	46.8028316497803	NA	NA	maps_centroid	mapped	Europe
+UK	UK	-3.19912087917328	55.4266357421875	NA	NA	maps_centroid	mapped	Europe
+USA	USA	-98.5	39.8	-98.5	39.8	manual_USA_lower48	mapped	N.America
+Vietnam	Vietnam	105.786182403564	15.9642333984375	NA	NA	maps_centroid	mapped	Asia
+Zimbabwe	Zimbabwe	29.115382194519	-19.0225582122803	NA	NA	maps_centroid	mapped	Africa

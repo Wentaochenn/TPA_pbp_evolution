@@ -1,0 +1,9 @@
+* text=auto eol=lf
+*.png binary
+*.ttf binary
+*.otf binary
+*.pdb -text
+*.tsv -text
+*.tree -text
+*.treefile -text
+*.fasta -text

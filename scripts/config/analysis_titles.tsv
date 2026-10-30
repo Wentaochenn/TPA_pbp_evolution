@@ -1,0 +1,28 @@
+part	title	title_zh
+sample_metadata.tsv	Sample metadata and analytical membership	样本元数据与分析纳入情况
+source_project_crosswalk.tsv	Source-project crosswalk	来源研究与项目对应关系
+analysis_scope.tsv	Analysis scope, callability and observed genotypes	分析范围、可判定性与观察基因型
+variant_callability.tsv	Analysis scope, callability and observed genotypes	分析范围、可判定性与观察基因型
+observed_genotypes.tsv	Analysis scope, callability and observed genotypes	分析范围、可判定性与观察基因型
+A506T_lineage_parsimony.tsv	Variant recurrence and lineage-specific A506T histories	变异重复性及A506T分谱系历史
+recurrence_and_selection_summary.tsv	Variant recurrence and lineage-specific A506T histories	变异重复性及A506T分谱系历史
+ER_ARD_model_sensitivity.tsv	ER–ARD model comparison	ER–ARD模型比较
+all_codon_selection_results.tsv	Complete codon-level selection results	完整密码子选择结果
+focal_topology_stability.tsv	Focal selection stability across genome-wide topologies	全基因组拓扑下重点位置选择结果的稳定性
+reference_structural_metrics.tsv	Reference structural metrics and SASA numerical checks	参考结构指标与SASA数值核查
+MrcA_SASA_resolution.tsv	Reference structural metrics and SASA numerical checks	参考结构指标与SASA数值核查
+ESM2_observed_replacements.tsv	ESM-2 scores for observed PBP amino-acid replacements	实际检出的PBP氨基酸替换及ESM-2评分
+protein_type_sequences.tsv	Protein-type definitions, lineage frequencies and published isolates	蛋白型定义、谱系频率与已发表菌株
+protein_type_labels.tsv	Protein-type definitions, lineage frequencies and published isolates	蛋白型定义、谱系频率与已发表菌株
+protein_type_lineage_frequencies.tsv	Protein-type definitions, lineage frequencies and published isolates	蛋白型定义、谱系频率与已发表菌株
+published_isolate_crosswalk.tsv	Protein-type definitions, lineage frequencies and published isolates	蛋白型定义、谱系频率与已发表菌株
+temporal_randomization.tsv	Initial temporal-signal screening	初始时间信号筛查
+extended_temporal_validation.tsv	Initial temporal-signal screening	初始时间信号筛查
+clustered_date_tests.tsv	Clustered date randomization and sampling sensitivity	聚类日期置换与抽样敏感性
+subset_stability.tsv	Clustered date randomization and sampling sensitivity	聚类日期置换与抽样敏感性
+strict_ESS.tsv	Clock-rate summaries and effective sample sizes	时钟速率摘要与有效样本量
+relaxed_ESS.tsv	Clock-rate summaries and effective sample sizes	时钟速率摘要与有效样本量
+clock_rate_summaries.tsv	Clock-rate summaries and effective sample sizes	时钟速率摘要与有效样本量
+cross_clock_event_matching.tsv	Acquisition dates and cross-clock matching	获得日期与跨时钟匹配
+strict_origin_events.tsv	Acquisition dates and cross-clock matching	获得日期与跨时钟匹配
+relaxed_origin_events.tsv	Acquisition dates and cross-clock matching	获得日期与跨时钟匹配

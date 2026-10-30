@@ -1,0 +1,134 @@
+{
+  "clock_rates.tsv": [
+    "raw_inputs/clock_rates.tsv"
+  ],
+  "dates.tsv": [
+    "raw_inputs/dates.tsv"
+  ],
+  "er_ard.tsv": [
+    "raw_inputs/er_ard.tsv"
+  ],
+  "haplotype_lineages.tsv": [
+    "raw_inputs/haplotype_lineages.tsv"
+  ],
+  "haplotype_samples.tsv": [
+    "raw_inputs/haplotype_samples.tsv"
+  ],
+  "metadata_provenance.tsv": [
+    "raw_inputs/metadata_provenance.tsv"
+  ],
+  "mrcA_ids.txt": [
+    "raw_inputs/mrcA_ids.txt"
+  ],
+  "nucleotide_haplotypes.tsv": [
+    "raw_inputs/nucleotide_haplotypes.tsv"
+  ],
+  "parsimony.tsv": [
+    "raw_inputs/parsimony.tsv"
+  ],
+  "pbp1_ids.txt": [
+    "raw_inputs/pbp1_ids.txt"
+  ],
+  "pbp2_ids.txt": [
+    "raw_inputs/pbp2_ids.txt"
+  ],
+  "primary.treefile": [
+    "raw_inputs/primary.treefile"
+  ],
+  "relaxed.tree": [
+    "raw_inputs/relaxed.tree"
+  ],
+  "relaxed_calibration.tsv": [
+    "raw_inputs/relaxed_calibration.tsv"
+  ],
+  "relaxed_origins.tsv": [
+    "raw_inputs/relaxed_origins.tsv"
+  ],
+  "rtt_points.tsv": [
+    "raw_inputs/rtt_points.tsv"
+  ],
+  "rtt_summary.tsv": [
+    "raw_inputs/rtt_summary.tsv"
+  ],
+  "simmap_draws.tsv": [
+    "raw_inputs/simmap_draws.tsv"
+  ],
+  "source_project_crosswalk.tsv": [
+    "raw_inputs/source_project_crosswalk.tsv"
+  ],
+  "strict.tree": [
+    "raw_inputs/strict.tree"
+  ],
+  "strict_calibration.tsv": [
+    "raw_inputs/strict_calibration.tsv"
+  ],
+  "strict_origins.tsv": [
+    "raw_inputs/strict_origins.tsv"
+  ],
+  "structural_metrics.tsv": [
+    "raw_inputs/structural_metrics.tsv"
+  ],
+  "temporal_signal.tsv": [
+    "raw_inputs/temporal_signal.tsv"
+  ],
+  "tp47_ids.txt": [
+    "raw_inputs/tp47_ids.txt"
+  ],
+  "TableS12A_clustered_date_tests.tsv": [
+    "raw_inputs/TableS12A_clustered_date_tests.tsv"
+  ],
+  "TableS12B_subset_stability.tsv": [
+    "raw_inputs/TableS12B_subset_stability.tsv"
+  ],
+  "TableS13B_strict_ESS.tsv": [
+    "raw_inputs/TableS13B_strict_ESS.tsv"
+  ],
+  "TableS13C_relaxed_ESS.tsv": [
+    "raw_inputs/TableS13C_relaxed_ESS.tsv"
+  ],
+  "matrix.tsv": [
+    "raw_inputs/matrix.tsv"
+  ],
+  "metadata.tsv": [
+    "raw_inputs/metadata.tsv"
+  ],
+  "ASR": [
+    "raw_inputs/ASR"
+  ],
+  "ESM": [
+    "raw_inputs/ESM"
+  ],
+  "mrcA_model.pdb": [
+    "raw_inputs/mrcA_model.pdb"
+  ],
+  "TOPOLOGY": [
+    "raw_inputs/TOPOLOGY"
+  ],
+  "temporal_extended_historical.tsv": [
+    "raw_inputs/temporal_extended_historical.tsv"
+  ],
+  "mrcA_fubar.json": [
+    "raw_inputs/mrcA_fubar.json"
+  ],
+  "mrcA_codon.fasta": [
+    "raw_inputs/mrcA_codon.fasta"
+  ],
+  "pbp1_fubar.json": [
+    "raw_inputs/pbp1_fubar.json"
+  ],
+  "pbp1_codon.fasta": [
+    "raw_inputs/pbp1_codon.fasta"
+  ],
+  "pbp2_fubar.json": [
+    "raw_inputs/pbp2_fubar.json"
+  ],
+  "pbp2_codon.fasta": [
+    "raw_inputs/pbp2_codon.fasta"
+  ],
+  "tp47_fubar.json": [
+    "raw_inputs/tp47_fubar.json"
+  ],
+  "tp47_codon.fasta": [
+    "raw_inputs/tp47_codon.fasta"
+  ]
+}

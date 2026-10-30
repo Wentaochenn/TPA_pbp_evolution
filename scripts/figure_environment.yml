@@ -1,0 +1,26 @@
+name: pbp_figures_release
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - numpy
+  - scipy
+  - pillow
+  - r-base=4.3.3
+  - r-ggplot2=3.4.4
+  - r-patchwork=1.2.0
+  - r-dplyr=1.1.4
+  - r-tidyr=1.3.1
+  - r-ggrepel=0.9.5
+  - r-ape=5.7_1
+  - r-jsonlite=1.8.8
+  - r-openxlsx=4.2.8
+  - r-maps=3.4.2
+  - r-svglite=2.1.3
+  - r-ragg=1.2.7
+  - r-systemfonts=1.0.5
+  - pymupdf
+  - fontconfig
+  - r-textshaping=0.3.7
+  - r-gtable=0.3.4
+  - r-scales=1.3.0

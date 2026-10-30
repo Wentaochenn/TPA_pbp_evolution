@@ -1,0 +1,33 @@
+{
+  "primary_tree": "results/03_iqtree/tpa_ss14_rooted.treefile",
+  "selection_dir": "results/10_selection",
+  "bootstrap_trees": null,
+  "source_ml_tree": null,
+  "provenance_report": null,
+  "bootstrap_kind": "auto",
+  "bootstrap_search_dir": "results/03_iqtree",
+  "n_bootstrap_trees": 20,
+  "tree_selection_seed": 20261024,
+  "hyphy": "hyphy",
+  "threads": 4,
+  "max_parallel": 2,
+  "mem_free": "8000M",
+  "genes": {
+    "mrcA": 884,
+    "pbp1": 624,
+    "pbp2": 652,
+    "tp47": 434
+  },
+  "fubar_posterior_threshold": 0.9,
+  "expected_sha256": {
+    "results/03_iqtree/tpa_ss14_rooted.treefile": "b63daa4143a1cc1e8c0a1bbefa82170900c1745a33a02f9b88bf2f1f3ccd9536",
+    "results/10_selection/mrcA_codon.fasta": "a2b36ce3331e4031860b0ad3fcf2539772ef68b2f1eaac8a87981c40dbe0617b",
+    "results/10_selection/pbp1_codon.fasta": "a4d53da53601230f0bc6efd988642da53ced55d49c4bdc2519891dc6b4db54e2",
+    "results/10_selection/pbp2_codon.fasta": "6c1ae0d6d44e625f94d399a0881ea0ffd229c8956be729e583ed1e0474574980",
+    "results/10_selection/tp47_codon.fasta": "848a8224d6cc6f5b6aa2317b907796b5b08d5caec598658d122b8888c0dc3e3b",
+    "results/10_selection/mrcA_fubar.json": "d42381e497d415d6775bb4216399c8ec969f35ed05c57fc5ce76de8008e30538",
+    "results/10_selection/pbp1_fubar.json": "e49f212fa8dfdc761cbd7af5db1fba0e5f4540f40fde5adb1f7377bd6f260dbe",
+    "results/10_selection/pbp2_fubar.json": "0c1a657ff5e80457b302496a6d681e649f94adfc5ee6b3ac450e1dbf17bea5d2",
+    "results/10_selection/tp47_fubar.json": "8d25676f75e7f782f45dd5fa8cf599d3b06ed466e60fe89ac04f0d86113f841d"
+  }
+}

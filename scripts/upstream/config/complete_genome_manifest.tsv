@@ -1,0 +1,6 @@
+sample_id	fasta	role
+NC_016844.1	consensus/NC_016844.1.fasta	auto
+NC_021490.2	consensus/NC_021490.2.fasta	auto
+NC_021508.1	consensus/NC_021508.1.fasta	reference
+NZ_CP010422.1	consensus/NZ_CP010422.1.fasta	auto
+NZ_CP015162.1	consensus/NZ_CP015162.1.fasta	auto

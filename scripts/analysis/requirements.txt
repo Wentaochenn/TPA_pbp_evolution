@@ -1,0 +1,8 @@
+numpy
+scipy
+biopython
+numba
+openpyxl
+
+# Stochastic mapping uses the R analysis environment.
+# ESM-2 inference uses PyTorch, transformers and pandas in its GPU environment.

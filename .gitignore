@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.venv/
+results/
+logs/
+Release/
+Data_for_Zenodo/
+.release_build_*/

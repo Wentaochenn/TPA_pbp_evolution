@@ -1,0 +1,16 @@
+{
+  "matrix": "results/05_extracted_variants/callability/sample_locus_ternary_matrix.tsv",
+  "dates": "results/13_beast2_selected_subset/input/beast2_dates.tsv",
+  "strict": {
+    "xml": "results/13_beast2_selected_subset/input/tpa_ss14_selected_subset_n533_strict_1294sites_ascertained.xml",
+    "trace": "PATH_TO_strict_TRACE.log",
+    "posterior": "PATH_TO_strict_POSTERIOR.trees",
+    "target_mcc": "PATH_TO_strict_MCC.tree"
+  },
+  "relaxed": {
+    "xml": "results/13_beast2_selected_subset/input/tpa_ss14_selected_subset_n533_relaxed_1294sites_ascertained.xml",
+    "trace": "PATH_TO_relaxed_TRACE.log",
+    "posterior": "PATH_TO_relaxed_POSTERIOR.trees",
+    "target_mcc": "PATH_TO_relaxed_MCC.tree"
+  }
+}

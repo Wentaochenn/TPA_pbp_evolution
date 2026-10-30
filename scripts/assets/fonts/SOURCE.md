@@ -1,0 +1,1 @@
+Unmodified URW Base35 Nimbus Sans fonts supplied with the reference rendering environment. Upstream source: https://github.com/ArtifexSoftware/urw-base35-fonts . Copyright and AGPL-3 with the font exception are reproduced in COPYRIGHT_AND_LICENSE.txt. These font terms are separate from the study-code license.

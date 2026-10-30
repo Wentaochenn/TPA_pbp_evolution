@@ -1,0 +1,22 @@
+{
+  "primary_tree": "results/03_iqtree/tpa_ss14_rooted.treefile",
+  "metadata": "TPA_master_metadata.xlsx",
+  "metadata_sample_column": "SRA_ID (Key)",
+  "metadata_lineage_column": "Clade (Lineage)",
+  "dates": "sample_dates.tsv",
+  "dates_header": false,
+  "dates_sample_column": "sample",
+  "dates_year_column": "year",
+  "lineage_values": [
+    "SS14"
+  ],
+  "selected_xml": "results/13_beast2_selected_subset/input/tpa_ss14_selected_subset_n533_strict_1294sites_ascertained.xml",
+  "random_subsets": 20,
+  "subset_n": 533,
+  "permutations": 9999,
+  "seed": 20261024,
+  "tree_units": "substitutions-per-site",
+  "expected_sha256": {
+    "results/03_iqtree/tpa_ss14_rooted.treefile": "b63daa4143a1cc1e8c0a1bbefa82170900c1745a33a02f9b88bf2f1f3ccd9536"
+  }
+}

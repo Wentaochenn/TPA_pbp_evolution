@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "Please cite the accompanying study and archived software release."
+title: "TPA PBP evolution: analysis and figure reproduction"
+type: software
+authors:
+  - family-names: Chen
+    given-names: Wentao
+repository-code: "https://github.com/Wentaochenn/TPA_pbp_evolution"
+version: 1.0.0
+date-released: 2026-10-31
