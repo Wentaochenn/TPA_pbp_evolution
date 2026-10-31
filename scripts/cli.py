@@ -34,6 +34,7 @@ def main(argv=None):
         q.add_argument('--esm2-results', type=Path, help='Completed annotated-reference ESM recomputation inference directory')
         q.add_argument('--pymol-python', type=Path)
         q.add_argument('--structure-render', type=Path)
+        q.add_argument('--font-dir', type=Path, help='Directory containing genuine Arial regular, bold, italic and bold-italic font files')
     for name in ['upstream', 'esm2', 'inputs']:
         sub.add_parser(name).add_argument('arguments', nargs=argparse.REMAINDER)
     q = sub.add_parser('analysis')
@@ -75,8 +76,15 @@ def main(argv=None):
             print('[VERIFY]', json.dumps(verify_data(data)), flush=True)
             cmd += ['--reuse-run', str(data/'frozen_run')]
             if not render and not a.rerender_structure and (data/'Structure_Render').is_dir():
-                render = data/'Structure_Render'
-        for flag, value in [('inputs', a.inputs), ('esm2-results', a.esm2_results), ('pymol-python', a.pymol_python), ('structure-render', render)]:
+                candidate = data/'Structure_Render'
+                from structure_stage import verify_render
+                try:
+                    verify_render(candidate, data/'frozen_run/work/figures/data/mrcA_model.pdb', 2400)
+                except (OSError, ValueError, KeyError, TypeError) as error:
+                    print('[RUN] Archived structural image is incompatible with this renderer; re-rendering the same reference PDB: '+str(error), flush=True)
+                else:
+                    render = candidate
+        for flag, value in [('inputs', a.inputs), ('esm2-results', a.esm2_results), ('pymol-python', a.pymol_python), ('structure-render', render), ('font-dir', a.font_dir)]:
             if value:
                 cmd += ['--'+flag, str(value.resolve())]
     else:

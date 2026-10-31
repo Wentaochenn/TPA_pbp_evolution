@@ -13,8 +13,8 @@
       "sha256": "722c62781a6c9301f7497ee6b1a36f0d31e8462a854fe11eb069f64aaa80b46a"
     },
     "README.md": {
-      "bytes": 7085,
-      "sha256": "3b91ab1aff66a7b791a74a754d522c85d43e4db7bb65496fdce9c40ebd206f5c"
+      "bytes": 7776,
+      "sha256": "aceb2272ba3729e92b5b0a3fd318b739d6916bee8edf8ae04f1e285fd6779648"
     },
     "VERSION": {
       "bytes": 6,
@@ -25,12 +25,12 @@
       "sha256": "25ee4bf3694d9a2501072bf55ff1371839dd91ce7e5036d72eaaf991dc6d1e54"
     },
     "scripts/Figure_legends_and_table_list_EN.md": {
-      "bytes": 8754,
-      "sha256": "f85d5e17646a644eff0d2e024e7ed367c596300ab20cf56bb0c8b3e2896dd700"
+      "bytes": 9004,
+      "sha256": "ea56993504363ad97b906ecd28f765cffb5d0312a0fecf280fb9f589092f8671"
     },
     "scripts/Figure_legends_and_table_list_ZH.md": {
-      "bytes": 7324,
-      "sha256": "cd7783d24c017cefabd3defa55ca90c6b776724d6dd60aa9b0ab640179d16d0f"
+      "bytes": 7534,
+      "sha256": "c1a154c0043a3c521e25a669c5d700b5f5a4c15dc137fa38aebf26f6ec7e1352"
     },
     "scripts/SOURCE_DATA_README.md": {
       "bytes": 630,
@@ -132,37 +132,17 @@
       "bytes": 1550,
       "sha256": "36cf1decac8d4e89a0f11822d0bf66900265f20a581a8825d524ffca03336c28"
     },
-    "scripts/assets/fonts/COPYRIGHT_AND_LICENSE.txt": {
-      "bytes": 52517,
-      "sha256": "1315a62758a603a3e6e87a79b8389563789c59c1740b9db8bc2b20e2e2145458"
-    },
-    "scripts/assets/fonts/NimbusSans-Bold.otf": {
-      "bytes": 83264,
-      "sha256": "7f33328e6b4d4cd21b45fa625791928c9407dc702db6780e56b09ca9a3ecaa67"
-    },
-    "scripts/assets/fonts/NimbusSans-BoldItalic.otf": {
-      "bytes": 95396,
-      "sha256": "3f47fb34fcb7de09f8cbc9f305191340ddebf7a068419f4bb5f49287dea59b87"
-    },
-    "scripts/assets/fonts/NimbusSans-Italic.otf": {
-      "bytes": 95244,
-      "sha256": "7b0bef5686aa58c0fd0f0d01beeae56664208490e30ca6a25431281c9a0c6402"
-    },
-    "scripts/assets/fonts/NimbusSans-Regular.otf": {
-      "bytes": 82264,
-      "sha256": "7c25be4d78155523080ab85b10277150657ff7dabbcad7037bdd536c9b6d0d08"
-    },
-    "scripts/assets/fonts/SOURCE.md": {
-      "bytes": 311,
-      "sha256": "ef96f4d6d3cfc18a0e8f9418df4f2dbc159c7275b078431c35a7f6373b769f6b"
-    },
     "scripts/check_outputs.py": {
       "bytes": 14134,
       "sha256": "ff148648058d88cb292a400e13871c87dc36d85a6a7b4cf286576328d33a542e"
     },
     "scripts/cli.py": {
-      "bytes": 4770,
-      "sha256": "c3dd6920be738d19e818c3dc9b10ebbd16fdc7c95d4f90d2db4588e94a48b25f"
+      "bytes": 5416,
+      "sha256": "bcf87cb7aa2afa9e77af206c20c36e43f9177643498981e5db71073bb81f9e85"
+    },
+    "scripts/clock_hpd.py": {
+      "bytes": 13644,
+      "sha256": "d9684e7bd73a8941e81fa5c2f3270e50b9ef59c0a5a85c3bd03e1d19f12f5a46"
     },
     "scripts/compare_results.py": {
       "bytes": 4633,
@@ -208,21 +188,25 @@
       "bytes": 453,
       "sha256": "02b88b36465858997c2d347088e698f1863f96cfd9e51d9715681bce90feabfe"
     },
+    "scripts/figure_fonts.py": {
+      "bytes": 19192,
+      "sha256": "5ca535ca71ac652b3bf1e5aba4ce83a61bfc0382fc54a01165ca061e8f61e166"
+    },
     "scripts/figures/R/original_plot_layers.R": {
       "bytes": 9558,
       "sha256": "0b28fc626fb307bc0f3e0cebd300bbbd0fc9dde3e98005656b4321b4ad3a416e"
     },
     "scripts/figures/R/panel_sources.R": {
-      "bytes": 7302,
-      "sha256": "b41d218bd693ede483a78520d149c9d7a0a5f48817da23e6a30f539e1ddf95cd"
+      "bytes": 7593,
+      "sha256": "e4a8a562924930cebb505ec954775ba3c4bca0a2639373b7c96d9f261bcc89b8"
     },
     "scripts/figures/R/render_figures.R": {
-      "bytes": 55859,
-      "sha256": "04c39f265955d8918bfbe655e51e6a27996dee7393c9fac4342edbeacbbd3587"
+      "bytes": 59091,
+      "sha256": "4ad348e4fe02ceda7e59a6c0d879cf6c73d8dba57afd99466854191fa782971c"
     },
     "scripts/figures/R/style.R": {
-      "bytes": 1540,
-      "sha256": "50acfc5c0cebfba545592c33a45c6a9d4aae6567c7024867c179c7a4103c8395"
+      "bytes": 1534,
+      "sha256": "ce2d41b3144977777c9aa9113c003460d28accff7aef677b0a1237e08746dc92"
     },
     "scripts/figures/qa/audit_all.py": {
       "bytes": 1441,
@@ -241,8 +225,8 @@
       "sha256": "3ab988c94b48cdd8b113974d03c3d1d781c71ee3f3207dd383e692eb23eb7d60"
     },
     "scripts/figures/qa/measure_layout.R": {
-      "bytes": 3382,
-      "sha256": "057346686a5817052493d11088a3d388c277e511155c3c51ebbd4ef512d9fb69"
+      "bytes": 3376,
+      "sha256": "ba8b4df1674267dc6debcf5b4de1296d031fd2e7227c8f62419538fc8cd4c367"
     },
     "scripts/figures/qa/panel_alignment.R": {
       "bytes": 6233,
@@ -265,8 +249,8 @@
       "sha256": "3a5ab8b6099a5267b395fdce47227a7b1b5bb6565b1e71e3511d4b340189679a"
     },
     "scripts/install_fonts.sh": {
-      "bytes": 267,
-      "sha256": "8febc55562ee2eac17ea416a4aea4338b04d3540c28323c26f7f8d9ad68763b7"
+      "bytes": 1587,
+      "sha256": "51ec328251b5c9e8ae521acfe7a479e04600fd8bebcfb6b72287c555f3b25373"
     },
     "scripts/integrity.py": {
       "bytes": 3563,
@@ -293,12 +277,12 @@
       "sha256": "2bf43c75e87739f7be5fc4c26c8e7f083c4c71561f5b4cee38ebd0952e08117f"
     },
     "scripts/run.py": {
-      "bytes": 8090,
-      "sha256": "6c3d09990fa7abeadcff1f5a9c7fc5c9616c0ee52d7174bdd1fa6fce0722ef6b"
+      "bytes": 9178,
+      "sha256": "bf65450d28a9807ece761ca668edfb521f95608c874afc325bd9af7ea58e126b"
     },
     "scripts/run_figures.R": {
-      "bytes": 2354,
-      "sha256": "8751a9ea90bef1c6b08318f4897f445dc95044a392b8d6a111bc117c64c33c9b"
+      "bytes": 2348,
+      "sha256": "579cfb7ea9ddacf8c8e6fd271eb11f6475eca95def2db3dce8a35989ad4e54e0"
     },
     "scripts/setup_environment.sh": {
       "bytes": 861,
@@ -309,16 +293,16 @@
       "sha256": "a3a9fe21f529db4c5cfb9567ed1486a669a7328393fdbe3f99ec0b0c98d8cdfe"
     },
     "scripts/structure/render_reference.py": {
-      "bytes": 6333,
-      "sha256": "4fa6990f6a2bb1c7c8f33668b0df99abe5db716802cd10cadae371f5bc60c9be"
+      "bytes": 8694,
+      "sha256": "2fa0fc6cc7584c32facb10612b4dc5437808f13c64e62e65e9bc7af44e933761"
     },
     "scripts/structure_environment.yml": {
       "bytes": 138,
       "sha256": "d4daf7a95d189c14ba843b5baf14c1b7cd1f9d32e03d5ea5d28264394acd1343"
     },
     "scripts/structure_stage.py": {
-      "bytes": 3725,
-      "sha256": "80d6a73be94904c2f5b5cf66f7cc0757b011e7b7610653a6f3247574338609d3"
+      "bytes": 5851,
+      "sha256": "6046879dff56c7f43fe61eea2bd3f2da2c19c2d667f65daffca7ea453c7e3588"
     },
     "scripts/study_inputs.py": {
       "bytes": 21173,

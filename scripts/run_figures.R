@@ -10,7 +10,7 @@ if (as.character(packageVersion('ggplot2')) != '3.4.4' ||
     as.character(packageVersion('patchwork')) != '1.2.0') {
     stop('This plotting code retains the validated ggplot2 3.4.4 / patchwork 1.2.0 interface. Use the dedicated figure environment; do not change the analytical tp_wgs environment.')
 }
-font <- Sys.getenv('PBP_FIGURE_FONT', 'Nimbus Sans')
+font <- Sys.getenv('PBP_FIGURE_FONT', 'Arial')
 available <- unique(systemfonts::system_fonts()$family)
 if (!tolower(font) %in% tolower(available)) {
     stop('Font not installed: ', font, '. Install it, or explicitly set PBP_FIGURE_FONT to the agreed alternative.')

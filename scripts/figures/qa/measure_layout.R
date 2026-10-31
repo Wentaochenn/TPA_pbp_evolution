@@ -3,7 +3,7 @@
 write_patchwork_panel_layout <- function(plot,manifest_path,width_in,height_in,panel_ids=NULL,
  row_groups=NULL,column_groups=NULL,exemptions=list()) {
  tmp <- tempfile(fileext='.pdf')
- grDevices::cairo_pdf(tmp,width=width_in,height=height_in,family=Sys.getenv('PBP_FIGURE_FONT','Nimbus Sans'))
+ grDevices::cairo_pdf(tmp,width=width_in,height=height_in,family=Sys.getenv('PBP_FIGURE_FONT','Arial'))
  on.exit({grDevices::dev.off();unlink(tmp)},add=TRUE)
  g <- patchwork::patchworkGrob(plot)
  grid::grid.newpage();grid::grid.draw(g);grid::grid.force()

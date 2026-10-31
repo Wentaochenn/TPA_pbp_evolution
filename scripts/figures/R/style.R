@@ -5,7 +5,7 @@ CONTINENT_COL <- c(Africa='#fec44f',Asia='#de2d26',Caribbean='#9f79ee',Europe='#
 FOCAL_COL <- c(A506T='#B2182B',A506V='#EF8A62',G708S='#EF8A62',M625V='#EF8A62',P564L='#2166AC',S394R='#2166AC')
 CLOCK_COL <- c(Strict='#8B73AE',Relaxed='#607D8B')
 STATE_COL <- c(A='#F5F5F5',T='#B2182B',V='#EF8A62',M='#756BB1',Missing='#BBBBBB')
-FONT <- Sys.getenv('PBP_FIGURE_FONT','Nimbus Sans')
+FONT <- Sys.getenv('PBP_FIGURE_FONT','Arial')
 # The manuscript source defines standard.textsize=9 and text.size.within=2.4.
 BASE_SIZE <- 9
 common_theme <- function() {

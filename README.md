@@ -9,12 +9,16 @@ Download and extract the companion Zenodo data archive. The input directory is `
 ```bash
 bash scripts/setup_environment.sh
 conda activate pbp_figures_release
-bash scripts/install_fonts.sh
+conda env create -f scripts/structure_environment.yml
 bash master.sh reproduce --data /path/to/Data_for_Zenodo \
-  --out /path/to/reproduced_outputs --compare
+  --out /path/to/reproduced_outputs --font-dir /path/to/Arial
 ```
 
-The R workflow regenerates five main figures, four supplementary figures, three supplementary tables and the data used by every figure panel. Inputs are checked against their archived SHA-256 values. `REPRODUCTION_CHECK.json` reports numerical and graphical agreement with the deposited outputs. Use the specified software versions and supplied fonts for matching graphics.
+The R workflow regenerates five main figures, four supplementary figures, three supplementary tables and the data used by every figure panel. Inputs are checked against their archived SHA-256 values. Figures use Arial regular, bold, italic and bold italic; provide genuine font files with `--font-dir`, or omit that option if these four faces are installed. PDF fonts and editable SVG text are checked after export. Arial font files are supplied separately and are not distributed in this repository.
+
+Figure 5 shows the existing common-ancestor node-date 95% HPD intervals and thin grey guides from sampled tips to their variant-state tracks. The node intervals and guide coordinates are included in the corresponding Source Data.
+
+For a strict comparison with archived figures, use the code commit recorded in `Data_for_Zenodo/RELEASE.json` and add `--compare`. `REPRODUCTION_CHECK.json` then reports numerical and graphical agreement. The current code can also use earlier frozen analytical inputs to generate the updated figure styling.
 
 | Directory | Contents |
 |---|---|
@@ -25,7 +29,7 @@ The R workflow regenerates five main figures, four supplementary figures, three 
 
 Supplementary Table 1 contains 1,861 genomes, 42 surveyed amino-acid positions across five genes and `mrcA_protein_type`. Codon states that cannot be resolved are marked `uncallable`; unresolved protein types are marked `untyped`. The workbook includes the callability criteria.
 
-Reference-structure images are checked against the archived model, rendering script and camera settings. To regenerate them from the PDB, create the PyMOL environment with `conda env create -f scripts/structure_environment.yml` and add `--rerender-structure` to the figure command. Use `--pymol-python /path/to/python` for another PyMOL interpreter.
+Reference-structure images are checked against the archived model, rendering script and camera settings. Compatible renderings are reused; otherwise the reference PDB is rendered using the specified PyMOL environment and fixed camera. Structure labels are editable Arial text. Add `--rerender-structure` to request a fresh rendering, or use `--pymol-python /path/to/python` for another PyMOL interpreter.
 
 ## Reanalyse the study inputs
 
@@ -102,8 +106,8 @@ bash master.sh inputs package --project /path/to/completed_analysis \
   --resources /path/to/resource_provenance.json
 ```
 
-This writes new code and data archives and checksums. Existing results are retained. Raw reads and model weights remain at their original sources; small custom databases can accompany the data with their provenance. If `--resources` is omitted, the deposited resource metadata are reused.
+This writes new code and data archives and checksums. Existing results are retained. Raw reads, database files and model weights are retrieved separately. The deposited resource metadata provide their identities and access information; these metadata are reused if `--resources` is omitted.
 
 ## Citation
 
-Please cite the accompanying study and its final archived code and data records. Software citation metadata are supplied in `CITATION.cff`. Third-party fonts retain their accompanying copyright and licence files.
+Please cite the accompanying study and its final archived code and data records. Software citation metadata are supplied in `CITATION.cff`.

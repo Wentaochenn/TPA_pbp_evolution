@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 options(warn=1)
-FONT <- Sys.getenv("PBP_FIGURE_FONT", "Nimbus Sans")
+FONT <- Sys.getenv("PBP_FIGURE_FONT", "Arial")
 a <- commandArgs(trailingOnly=TRUE)
 filearg <- sub('^--file=','',grep('^--file=',commandArgs(),value=TRUE)[1])
 PKG <- normalizePath(file.path(dirname(filearg),'..'))
@@ -86,7 +86,7 @@ savefig<-function(p,id,w=280,h=230,main=TRUE){
  if(inherits(p,'patchwork')||inherits(p$facet,c('FacetWrap','FacetGrid')))require_patchwork_panel_alignment(if(inherits(p,'patchwork'))p else wrap_plots(p),manifest_path=file.path(OUT,'qa',paste0(id,'.layout.json')),report_path=file.path(OUT,'qa',paste0(id,'.alignment.json')),width_in=w/25.4,height_in=h/25.4,audit_script=file.path(PKG,'qa/audit_panel_alignment.py'),python=Sys.which('python3'),strict=TRUE)
  atomic_draw<-function(ext,device){target<-paste0(b,ext);tmp<-tempfile(pattern=paste0(id,'_'),tmpdir=dirname(b),fileext=ext);device(tmp);print(p);dev.off();if(!file.exists(tmp)||file.info(tmp)$size==0)stop('Empty export: ',id,ext);if(!file.rename(tmp,target))stop('Cannot finalize export: ',target)}
  atomic_draw('.pdf',function(f)grDevices::cairo_pdf(f,width=w/25.4,height=h/25.4,family=FONT))
- atomic_draw('.svg',function(f)svglite::svglite(f,width=w/25.4,height=h/25.4))
+ atomic_draw('.svg',function(f)svglite::svglite(f,width=w/25.4,height=h/25.4,system_fonts=list(sans=FONT,serif=FONT,mono=FONT,symbol=FONT)))
  atomic_draw('.png',function(f)ragg::agg_png(f,width=w,height=h,units='mm',res=300,background='white'))
  export_plot_layers(p,id,OUT)
  registry[[id]]<<-list(width_mm=w,height_mm=h,main=main);objects[[id]]<<-p
@@ -292,9 +292,25 @@ read_ppm <- function(name,crop=c(0,1,0,1),stride=1L){
  ar<-ar[,xx,yy,drop=FALSE];cols<-rgb(as.integer(ar[1,,]),as.integer(ar[2,,]),as.integer(ar[3,,]),maxColorValue=255)
  as.raster(t(matrix(cols,nrow=length(xx),ncol=length(yy))))
 }
-structure_panel<-function(img,title,subtitle){ggplot()+annotation_custom(grid::rasterGrob(img,interpolate=TRUE),xmin=0,xmax=1,ymin=0,ymax=1)+coord_fixed(ratio=nrow(img)/ncol(img),xlim=c(0,1),ylim=c(0,1),expand=FALSE)+theme_void(base_size=9)+theme(axis.title.x=element_blank(),axis.title.y=element_blank(),axis.text.x=element_blank(),axis.text.y=element_blank())+labs(title=title,subtitle=subtitle)+theme(plot.title=element_text(size=11,face='bold'),plot.subtitle=element_text(size=8),plot.margin=margin(6,6,6,6))}
+structure_panel<-function(img,title,subtitle,overlay=NULL){
+ p<-ggplot()+annotation_custom(grid::rasterGrob(img,interpolate=TRUE),xmin=0,xmax=1,ymin=0,ymax=1)
+ if(!is.null(overlay)){
+  stopifnot(nrow(overlay)==3L,identical(as.integer(overlay$position),c(506L,625L,708L)),
+            identical(as.character(overlay$residue_label),c('A506','M625','G708')),
+            all(overlay$font_family=='Arial'),all(overlay$font_face=='bold'),FONT=='Arial')
+  p<-p+geom_segment(data=overlay,aes(x=leader_x,y=leader_y,xend=leader_xend,yend=leader_yend),
+       inherit.aes=FALSE,colour='grey20',linewidth=.3,lineend='round')+
+       geom_text(data=overlay,aes(x=label_x,y=label_y,label=residue_label,hjust=hjust),
+       inherit.aes=FALSE,family=FONT,fontface='bold',colour='black',size=3.1)
+ }
+ p+coord_fixed(ratio=nrow(img)/ncol(img),xlim=c(0,1),ylim=c(0,1),expand=FALSE)+
+ theme_void(base_size=9,base_family=FONT)+theme(axis.title.x=element_blank(),axis.title.y=element_blank(),
+ axis.text.x=element_blank(),axis.text.y=element_blank())+labs(title=title,subtitle=subtitle)+
+ theme(plot.title=element_text(size=11,face='bold'),plot.subtitle=element_text(size=8),plot.margin=margin(6,6,6,6))
+}
 pwhole<-structure_panel(read_ppm('MrcA_reference_structure.ppm'),'A  mrcA reference structure','Reference-model rendering; red: A506; orange: M625 and G708')+labs(caption='AlphaFold reference model · UniProt O83703')
-plocal<-structure_panel(read_ppm('MrcA_local_context.ppm'),'B  Local structural context','Reference-model local view')+labs(caption='A506: red; M625 and G708: orange')+theme(plot.caption=element_text(size=8,hjust=.5))
+structure_overlay<-read_tsv('structure_label_overlay.tsv')
+plocal<-structure_panel(read_ppm('MrcA_local_context.ppm'),'B  Local structural context','Reference-model local view',overlay=structure_overlay)+labs(caption='A506: red; M625 and G708: orange')+theme(plot.caption=element_text(size=8,hjust=.5))
 sm<-read_tsv('structural_metrics.tsv')
 sm<-sm[sm$gene=='mrcA' & sm$position%in%c(506L,625L,708L),,drop=FALSE]
 sm<-sm[!duplicated(sm$position),,drop=FALSE]
@@ -308,17 +324,54 @@ sm$residue_label<-paste0(sm$wt_aa,sm$position)
 stopifnot(identical(as.character(sm$residue_label),c('A506','M625','G708')),all(is.finite(sm$sasa)))
 sm<-sm[,c('gene','position','wt_aa','pdb_aa','wt_match','residue_label','sasa','plddt','sasa_n_points','probe_radius_A')]
 sm$label<-factor(sm$residue_label,levels=c('G708','M625','A506'))
-pmetric<-ggplot(sm,aes(sasa,label))+geom_point(size=3,colour='#2166AC',shape=16)+geom_text(aes(label=sprintf('%.2f',sasa)),hjust=-.35,size=2.8,colour='grey20')+scale_x_continuous(expand=expansion(mult=c(.07,.30)))+labs(title='D  Residue solvent accessibility',x=expression(plain(SASA)~(ring(plain(A))^2)),y=NULL)
+pmetric<-ggplot(sm,aes(sasa,label))+geom_point(size=3,colour='#2166AC',shape=16)+geom_text(aes(label=sprintf('%.2f',sasa)),hjust=-.35,size=2.8,colour='grey20')+scale_x_continuous(expand=expansion(mult=c(.07,.30)))+labs(title='D  Residue solvent accessibility',x='SASA (Å²)',y=NULL)
 write_tsv(ca,'Fig6_reference_CA_coordinates');write_tsv(sm,'Fig6_reported_structure_metrics')
 savefig((pwhole+plocal+plot_layout(widths=c(1.6,1)))/(pconf+pmetric+plot_layout(widths=c(1.6,1)))+plot_layout(heights=c(1.6,1)),'Supp6_structural_context',310,270,FALSE)
 dates<-read_tsv('dates.tsv');keep<-dates$matching_status=='reciprocal_unique_match'&is.finite(dates$strict_posterior_simmap_median)&is.finite(dates$relaxed_posterior_simmap_median)&dates$strict_posterior_event_matching_support>=.5&dates$relaxed_posterior_event_matching_support>=.5;keep[is.na(keep)]<-FALSE;dd<-dates[keep,];events<-dd$strict_event;stopifnot(length(events)==9)
 chronoplots<-list();tipyears<-list()
 for(m in c('strict','relaxed')){tt<-ape::read.nexus(file.path(PKG,'data',paste0(m,'.tree')));tt<-ape::ladderize(tt);cc<-coords(tt);tt<-cc$tree;cal<-read_tsv(paste0(m,'_calibration.tsv'));xx<-cal$mcc_root_date_median[1]+cc$x;nt<-cc$nt;stopifnot(nt==533,all(tt$tip.label%in%mat$sample));tipyears[[m]]<-setNames(xx[seq_len(nt)],tt$tip.label)
+
+ # Match annotations by descendant tip sets, which remain stable after ladderization.
+ node_ids<-seq.int(nt+1L,cc$nn)
+ children<-split(tt$edge[,2],tt$edge[,1]);tip_sets<-vector('list',cc$nn)
+ for(i in seq_len(nt))tip_sets[[i]]<-tt$tip.label[i]
+ postorder<-ape::reorder.phylo(tt,'postorder')
+ for(p in unique(postorder$edge[,1]))tip_sets[[p]]<-sort(unlist(tip_sets[children[[as.character(p)]]],use.names=FALSE),method='radix')
+ descendant_keys<-vapply(node_ids,function(p)paste(tip_sets[[p]],collapse=';'),character(1))
+ hpd_input<-read_tsv(paste0(m,'_node_hpd.tsv'))
+ stopifnot(tt$Nnode==532L,nrow(hpd_input)==532L,!anyDuplicated(hpd_input$descendant_tip_set),
+           setequal(descendant_keys,hpd_input$descendant_tip_set))
+ node_hpd<-hpd_input[match(descendant_keys,hpd_input$descendant_tip_set),,drop=FALSE]
+ stopifnot(all(node_hpd$clock==m),all(node_hpd$n_descendants==lengths(tip_sets[node_ids])),
+           all(is.finite(node_hpd$point_date)),all(abs(node_hpd$point_date-xx[node_ids])<1e-6),
+           all(is.finite(node_hpd$hpd_lower_date)),all(is.finite(node_hpd$hpd_upper_date)),
+           all(node_hpd$hpd_lower_date<=node_hpd$hpd_upper_date))
+ node_hpd$node<-node_ids;node_hpd$y<-cc$y[node_ids]
+ node_hpd$ymin<-node_hpd$y-.7;node_hpd$ymax<-node_hpd$y+.7
+ node_hpd$fill<-'#6B9AC4'
+ # These guides are graphical alignments, never added to the phylogenetic edges.
+ tip_guides<-data.frame(sample=tt$tip.label,tip_date=xx[seq_len(nt)],
+     x=xx[seq_len(nt)],xend=2029-2.3/2,y=cc$y[seq_len(nt)],yend=cc$y[seq_len(nt)],
+     role='Tip alignment guide')
+ stopifnot(nrow(tip_guides)==533L,!anyDuplicated(tip_guides$sample),
+           all(is.finite(tip_guides$x)),all(tip_guides$x<=tip_guides$xend))
  seg<-data.frame(x=xx[tt$edge[,1]],xend=xx[tt$edge[,2]],y=cc$y[tt$edge[,2]],yend=cc$y[tt$edge[,2]])
  vert<-do.call(rbind,lapply(unique(tt$edge[,1]),function(p)data.frame(x=xx[p],xend=xx[p],y=min(cc$y[tt$edge[tt$edge[,1]==p,2]]),yend=max(cc$y[tt$edge[tt$edge[,1]==p,2]]))));seg<-rbind(seg,vert)
  ti<-match(tt$tip.label,mat$sample);track<-do.call(rbind,lapply(seq_along(FOCAL),function(j){z<-mat[ti,FOCAL[j]];data.frame(x=2029+(j-1)*2.8,y=cc$y[seq_len(nt)],colour=ifelse(is.na(z),'#BBBBBB',ifelse(z==1,FOCAL_COL[LAB[j]],'#F6F6F6')),sample=tt$tip.label,locus=FOCAL[j],state=z)}))
- pp<-ggplot()+geom_segment(data=seg,aes(x=x,xend=xend,y=y,yend=yend,linetype='Phylogenetic branch'),linewidth=.14,colour='#666666')+scale_linetype_manual(values=c('Phylogenetic branch'=1),name=NULL)+geom_tile(data=track,aes(x,y,fill=colour),width=2.3,height=1.03)+scale_fill_identity(name='Variant state',breaks=c('#F6F6F6','#BBBBBB'),labels=c('Noncarrier','Uncallable'),guide='legend')+annotate('text',x=2029+(0:5)*2.8,y=nt+12,label=LAB,angle=90,hjust=0,size=2.4)+geom_vline(xintercept=1943,linetype=2,linewidth=.25,colour='grey65')+scale_x_continuous(breaks=c(1925,1950,1975,2000,2025),limits=c(1918,2046),expand=c(0,0))+scale_y_continuous(limits=c(-12,nt+63),breaks=NULL,expand=c(0,0))+labs(title=paste0(if(m=='strict')'A  Strict-clock time-scaled phylogeny' else 'B  Relaxed-clock time-scaled phylogeny'),caption='SS14: n = 533; MCC topology; CA node heights',x='Calendar year',y=NULL)+theme(axis.line.y=element_blank(),axis.ticks.y=element_blank(),panel.grid=element_blank())
- chronoplots[[m]]<-pp;write_tsv(track,paste0('Fig7_',m,'_tip_tracks'));write_tsv(seg,paste0('Fig7_',m,'_tree_segments'))
+ pp<-ggplot()+
+ geom_segment(data=tip_guides,aes(x=x,xend=xend,y=y,yend=yend,linetype='Tip alignment guide'),
+              linewidth=.07,colour='#E2E2E2',inherit.aes=FALSE)+
+ geom_rect(data=node_hpd,aes(xmin=hpd_lower_date,xmax=hpd_upper_date,ymin=ymin,ymax=ymax,fill=fill),
+           alpha=.20,colour=NA,inherit.aes=FALSE,show.legend=FALSE)+
+ geom_segment(data=seg,aes(x=x,xend=xend,y=y,yend=yend,linetype='Phylogenetic branch'),linewidth=.14,colour='#666666')+
+ scale_linetype_manual(values=c('Phylogenetic branch'='solid','Tip alignment guide'='dashed'),
+      breaks=c('Phylogenetic branch','Tip alignment guide'),name=NULL,
+      guide=guide_legend(order=1,override.aes=list(colour=c('#666666','#D0D0D0'),linewidth=c(.35,.15))))+
+ geom_tile(data=track,aes(x,y,fill=colour),width=2.3,height=1.03)+
+ scale_fill_identity(name=NULL,breaks=c('#6B9AC4','#F6F6F6','#BBBBBB'),
+      labels=c('95% node-age HPD','Noncarrier','Uncallable'),
+      guide=guide_legend(order=2,override.aes=list(alpha=c(.30,1,1))))+annotate('text',x=2029+(0:5)*2.8,y=nt+12,label=LAB,angle=90,hjust=0,size=2.4)+geom_vline(xintercept=1943,linetype=2,linewidth=.25,colour='grey65')+scale_x_continuous(breaks=c(1925,1950,1975,2000,2025),limits=c(1918,2046),expand=c(0,0))+scale_y_continuous(limits=c(-12,nt+63),breaks=NULL,expand=c(0,0))+labs(title=paste0(if(m=='strict')'A  Strict-clock time-scaled phylogeny' else 'B  Relaxed-clock time-scaled phylogeny'),caption='SS14: n = 533; MCC topology; CA node heights',x='Calendar year',y=NULL)+theme(axis.line.y=element_blank(),axis.ticks.y=element_blank(),panel.grid=element_blank())
+ chronoplots[[m]]<-pp;write_tsv(track,paste0('Fig7_',m,'_tip_tracks'));write_tsv(seg,paste0('Fig7_',m,'_tree_segments'));write_tsv(node_hpd,paste0('Fig7_',m,'_node_age_hpd'));write_tsv(tip_guides,paste0('Fig7_',m,'_sampling_date_guides'))
 }
 long<-do.call(rbind,lapply(c('strict','relaxed'),function(m)data.frame(event=dd$strict_event,source_event=dd[[paste0(m,'_event')]],clock=ifelse(m=='strict','Strict','Relaxed'),median=dd[[paste0(m,'_posterior_simmap_median')]],low=dd[[paste0(m,'_posterior_simmap_hpd_low')]],high=dd[[paste0(m,'_posterior_simmap_hpd_high')]],p_after=dd[[paste0(m,'_posterior_simmap_p_after_1943')]])))
 event_locus<-sub('_origin_.*','',events);event_map<-data.frame(source_event=events,display_event=paste0(event_locus,' #',ave(seq_along(events),event_locus,FUN=seq_along)));write_tsv(event_map,'Fig6_event_number_crosswalk');long$display_event<-event_map$display_event[match(long$event,event_map$source_event)]

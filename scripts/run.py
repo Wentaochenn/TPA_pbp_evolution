@@ -33,6 +33,7 @@ def main():
     p.add_argument('--pymol-environment',default='pbp_structure_render')
     p.add_argument('--structure-render',type=Path,help='Reuse a completed render with matching model, script, camera and resolution')
     p.add_argument('--structure-width',type=int,default=2400)
+    p.add_argument('--font-dir',type=Path,help='Genuine Arial font files; uses installed Arial if omitted')
     a=p.parse_args();project=a.project.resolve()
     stamp=time.strftime('%Y%m%d_%H%M%S')
     out=a.out.resolve() if a.out else project/'results/figures'/f'run_{os.environ.get("JOB_ID","manual")}_{stamp}'
@@ -73,6 +74,14 @@ def main():
             from esm2_inputs import refresh
             status['esm2_input_update']=refresh(out,a.esm2_results)
         if not a.prepare_only:
+            from figure_fonts import check as check_fonts
+            font_report = check_fonts(a.font_dir, out/'font_config')
+            if font_report['state'] != 'PASS':
+                raise RuntimeError('Genuine Arial regular, bold, italic and bold-italic faces are required: '+ '; '.join(font_report['errors']))
+            os.environ.pop('FONTCONFIG_PATH', None)
+            os.environ.update(font_report['environment'])
+            os.environ['PBP_FIGURE_FONT'] = 'Arial'
+            status['font_family'] = 'Arial'
             print('[RUN] Publication runtime and R syntax preflight',flush=True)
             execute([sys.executable,PACKAGE/'preflight.py','--package',PACKAGE,
                      '--rscript',a.rscript,'--out',out/'ENVIRONMENT_CHECK.json'],
@@ -81,6 +90,8 @@ def main():
             status['model_mapping_validation']=validate_model_mappings(out)
             from structure_stage import ensure_structure
             status['structure_render'] = ensure_structure(out,a.pymol_python,a.pymol_environment,a.structure_render,a.structure_width)
+            from clock_hpd import prepare_clock_hpd
+            status['node_hpd_inputs'] = prepare_clock_hpd(out/'work/figures/data')
             from prepare import sha
             data=out/'work/figures/data'
             from prepare import sasa
@@ -119,6 +130,11 @@ def main():
         shutil.copytree(out/'R_export/qa',out/'QA')
         exported=json.loads((out/'FIGURE_INDEX.json').read_text())
         if len(exported)!=9:raise ValueError('Expected five main and four supplementary figures')
+        from figure_fonts import verify as verify_fonts
+        font_report = verify_fonts(out/'Figures', out/'FONT_VALIDATION.json')
+        if font_report['state'] != 'PASS':
+            raise RuntimeError('Figure font validation failed: '+ '; '.join(font_report['errors']))
+        status['font_validation'] = 'PASS'
         table_status=json.loads((out/'TABLE_EXPORT_STATUS.json').read_text())
         from check_outputs import validate
         validation=validate(out)

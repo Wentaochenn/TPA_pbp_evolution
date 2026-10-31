@@ -15,6 +15,47 @@ import traceback
 EXPECTED_SHA256 = '8a13293e93d580c94a59cddd6cb56587106a4947a18d5c7fe21ae6b6d1327587'
 
 
+
+def _build_label_overlay(marked, view, width, height):
+    """Project C-alpha markers to bottom-left normalized orthographic image space.
+
+    PyMOL get_view rotation is column-major: camera = R.T*(p-origin)+translation.
+    Half-height = -view[11]*tan(field_of_view/2), half-width includes image aspect.
+    Text and leaders are drawn by R; no labels are baked into the raster.
+    """
+    if len(view)!=18 or not all(math.isfinite(float(v)) for v in view):
+        raise ValueError('Invalid label camera')
+    if width<=0 or height<=0 or view[11]>=0 or abs(abs(view[17])-20)>1e-5:
+        raise ValueError('Expected fixed orthographic 20-degree camera')
+    for i in range(3):
+        for j in range(3):
+            dot=sum(view[3*k+i]*view[3*k+j] for k in range(3))
+            if abs(dot-(1 if i==j else 0))>1e-4:raise ValueError('Nonorthogonal camera')
+    expected={506:('ALA','A506'),625:('MET','M625'),708:('GLY','G708')}
+    by_site={int(row['position']):row for row in marked}
+    if len(marked)!=3 or set(by_site)!=set(expected):raise ValueError('Expected three marked sites')
+    hh=-view[11]*math.tan(math.radians(20)/2);hw=hh*width/height
+    offsets={506:(-.13,-.04),625:(.11,-.02),708:(-.08,.055)}
+    rows=[]
+    for site,(resn,label) in expected.items():
+        atom=by_site[site]
+        if atom['residue']!=resn:raise ValueError('Reference residue differs')
+        p=[float(atom[a+'_A']) for a in ('x','y','z')]
+        rel=[p[k]-view[12+k] for k in range(3)]
+        cam=[sum(view[3*k+i]*rel[k] for k in range(3))+view[9+i] for i in range(3)]
+        mx,my=.5+cam[0]/(2*hw),.5+cam[1]/(2*hh)
+        dx,dy=offsets[site];lx,ly=mx+dx,my+dy
+        if not all(.03<v<.97 for v in (mx,my,lx,ly)):raise ValueError('Label outside camera')
+        length=math.hypot(dx*2*hw,dy*2*hh)
+        rows.append(dict(view='MrcA_local_context',position=site,residue_label=label,
+            marker_x=mx,marker_y=my,label_x=lx,label_y=ly,
+            leader_x=lx+(.012 if dx<0 else -.012),leader_y=ly,
+            leader_xend=mx+dx*1.7/length,leader_yend=my+dy*1.7/length,
+            hjust=1 if dx<0 else 0,font_family='Arial',font_face='bold',
+            coordinate_system='normalized_image_bottom_left',image_width_px=width,image_height_px=height))
+    return rows
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--pdb',type=Path,required=True)
@@ -77,18 +118,14 @@ def main():
         cmd.show('spheres','marked_ca');cmd.set('sphere_scale',1.0,'marked_ca')
         cmd.select('marked_residues','mrcA and resi 506+625+708')
         cmd.show('sticks','marked_residues');cmd.set('stick_radius',0.18,'marked_residues')
-        cmd.set('label_color','black');cmd.set('label_size',10);cmd.set('label_font_id',7)
-        cmd.set('float_labels',1);cmd.set('label_outline_color','white')
-        for label,site in [('A506',506),('M625',625),('G708',708)]:
-            cmd.label('mrcA and name CA and resi '+str(site),repr(label))
-        for site,position in [(506,[-5.5,-3.5,3.0]),(625,[4.0,1.0,3.0]),(708,[-4.0,3.0,3.0])]:
-            cmd.set('label_position',position,'mrcA and name CA and resi '+str(site))
+        # R draws editable Arial labels; the reference PNG has no text.
+        cmd.hide('labels','all')
         views={}
         for name in ['MrcA_reference_structure','MrcA_local_context']:
             cmd.hide('labels','all')
             cmd.set('cartoon_transparency',0.20 if name=='MrcA_reference_structure' else 0.55)
-            if name=='MrcA_local_context':cmd.show('labels','marked_ca')
             cmd.set_view(presets['views'][name])
+            cmd.set('orthoscopic',1);cmd.set('field_of_view',20)
             views[name]=list(cmd.get_view())
             cmd.png(str(out/(name+'.png')),width=a.width,height=(round(a.width*0.625) if name=='MrcA_reference_structure' else a.width),dpi=300,ray=1,quiet=0)
             if not (out/(name+'.png')).is_file():raise RuntimeError('PNG was not written')
@@ -96,12 +133,18 @@ def main():
         with (out/'MrcA_marked_residue_coordinates.tsv').open('w',newline='') as h:
             w=csv.DictWriter(h,fieldnames=list(marked[0]),delimiter='\t');w.writeheader();w.writerows(marked)
         (out/'camera_views.json').write_text(json.dumps(views,indent=2)+'\n')
+        overlay=_build_label_overlay(marked,views['MrcA_local_context'],a.width,a.width)
+        overlay_path = out/'MrcA_label_positions.tsv'
+        with overlay_path.open('w',newline='') as f:
+            w=csv.DictWriter(f,fieldnames=list(overlay[0]),delimiter='\t');w.writeheader();w.writerows(overlay)
         provenance={'state':'complete','pdb':str(pdb),'pdb_sha256':sha,'pymol_version':list(cmd.get_version()),
                     'renderer':'PyMOL CPU ray tracer through cmd.png(ray=1)',
                     'original_image_assets_used':False,'mutant_model_generated':False,
                     'camera_preset_sha256':hashlib.sha256(a.camera_presets.read_bytes()).hexdigest(),
                     'camera_provenance':presets['view_provenance'],
                     'marked_positions':[506,625,708],'image_width_px':a.width,
+                    'raster_labels':False,'vector_label_font':'Arial',
+                    'vector_label_sha256':hashlib.sha256(overlay_path.read_bytes()).hexdigest(),
                     'script_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
         (out/'RENDER_STATUS.json').write_text(json.dumps(provenance,indent=2,default=str)+'\n')
         print('[DONE] '+str(out),flush=True)
