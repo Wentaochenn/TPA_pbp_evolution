@@ -14,6 +14,12 @@ from integrity import file_manifest, sha, verify_data
 
 class ExistingInputPackagingTests(unittest.TestCase):
     def test_existing_upstream_inputs_are_repackaged_once(self):
+        self._package_case('Upstream_Inputs/sample_metadata.tsv')
+
+    def test_earlier_supplementary_metadata_remains_compatible(self):
+        self._package_case('Supplementary_Tables/TableS1_sample_metadata.tsv')
+
+    def _package_case(self, metadata_relative):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             project, data, out = (root / p for p in ('project', 'data', 'package'))
@@ -28,12 +34,12 @@ class ExistingInputPackagingTests(unittest.TestCase):
             for row in assemblies:
                 records.append(dict(sample=row['sample_id'], year='2000', lineage='Nichols', country='Country'))
                 dest = project / row['fasta'];dest.parent.mkdir(parents=True, exist_ok=True);dest.write_text('>reference\nACGT\n')
-            metadata = data / 'Supplementary_Tables/TableS1_sample_metadata.tsv'
+            metadata = data / metadata_relative
             inputs.write_tsv(metadata, records, ['sample', 'year', 'lineage', 'country'])
             (project / 'sample_dates.tsv').write_text(''.join(r['sample']+'\t2000\n' for r in records))
             for name in ('TPA_SS14.fasta', 'TPA_Nichols.fasta'):
                 dest = project / 'refs' / name;dest.parent.mkdir(exist_ok=True);dest.write_text('>reference\nACGT\n')
-            old_inputs = data / 'Upstream_Inputs';old_inputs.mkdir()
+            old_inputs = data / 'Upstream_Inputs';old_inputs.mkdir(exist_ok=True)
             (old_inputs / 'reference_proteins.fasta').write_text('>mrcA\nMA\n')
             (old_inputs / 'esm2_model.json').write_text(json.dumps(dict(model_files=[dict(path='weights.bin', sha256='a'*64)])))
             (old_inputs / 'README.md').write_text('Previous study input instructions\n')
@@ -55,5 +61,8 @@ class ExistingInputPackagingTests(unittest.TestCase):
                 archive.extractall(extract, filter='data')
             self.assertEqual(verify_data(extract/'Data_for_Zenodo')['state'], 'PASS')
             self.assertEqual(status['genomes'], 1861)
+            self.assertEqual(len(inputs.rows(extract/'Data_for_Zenodo/Upstream_Inputs/sample_metadata.tsv')), 1861)
+            if metadata_relative.startswith('Upstream_Inputs/'):
+                self.assertFalse((extract/'Data_for_Zenodo/Supplementary_Tables').exists())
 
 if __name__ == '__main__': unittest.main()

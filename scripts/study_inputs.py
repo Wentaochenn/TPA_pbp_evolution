@@ -43,7 +43,7 @@ def cohort(metadata):
     records = rows(metadata)
     required = {'sample', 'year', 'lineage', 'country'}
     if not records or not required.issubset(records[0]):
-        raise ValueError('Use Supplementary Table 1 with sample, year, lineage and country columns')
+        raise ValueError('Use study metadata with sample, year, lineage and country columns')
     by_sample = {r['sample']: r for r in records}
     if len(by_sample) != len(records) or any(not s for s in by_sample):
         raise ValueError('Metadata sample identifiers must be nonempty and unique')
@@ -60,7 +60,7 @@ def cohort(metadata):
     assemblies = rows(UPSTREAM / 'config/complete_genome_manifest.tsv')
     expected = set(groups) | {r['sample_id'] for r in assemblies}
     if set(by_sample) != expected:
-        raise ValueError('Supplementary Table 1 does not match the deposited cohort: missing=%s; extra=%s' %
+        raise ValueError('Study metadata do not match the deposited cohort: missing=%s; extra=%s' %
                          (sorted(expected-set(by_sample)), sorted(set(by_sample)-expected)))
     if len(records) != 1861 or len(groups) != 1856 or len(assemblies) != 5:
         raise ValueError('Expected 1861 genomes, 1856 read runs and five assemblies')
@@ -107,10 +107,10 @@ def export_metadata(metadata, out, dates=None):
                 original[sample] = year
         original = {s: v for s, v in original.items() if s in {r['sample'] for r in records}}
         if set(original) != set(date_values):
-            raise ValueError('Sampling-date coverage differs from Supplementary Table 1')
+            raise ValueError('Sampling-date coverage differs from the study metadata')
         for sample, year in original.items():
             if int(year) != int(date_values[sample]):
-                raise ValueError('Sampling year differs from Supplementary Table 1: ' + sample)
+                raise ValueError('Sampling year differs from the study metadata: ' + sample)
         date_values = original
     book.save(out / 'TPA_master_metadata.xlsx')
     (out / 'sample_dates.tsv').write_text(''.join('%s\t%s\n' % (s, format(v, '.17g')) for s, v in sorted(date_values.items())))
@@ -257,7 +257,9 @@ def package(project, data, out, resources=None):
     code_entries = json.loads((CODE / 'PACKAGE_MANIFEST.json').read_text())['files']
     verify_manifest(CODE, code_entries)
     verified = verify_data(data)
-    metadata = data / 'Supplementary_Tables/TableS1_sample_metadata.tsv'
+    metadata = data / 'Upstream_Inputs/sample_metadata.tsv'
+    if not metadata.is_file():
+        metadata = data / 'Supplementary_Tables/TableS1_sample_metadata.tsv'
     cohort(metadata)
     if out.exists() or any(out.is_relative_to(r) or r.is_relative_to(out) for r in (data, CODE)):
         raise ValueError('Use a new package output directory outside code and deposited data')
@@ -321,7 +323,7 @@ def package(project, data, out, resources=None):
     if adapter.is_file():
         copy_study_input(adapter, inputs / 'refs/TruSeq3-PE.fa')
     instructions = ('# Study input files\n\n'
-        'Sample metadata are Supplementary Table 1. References and five assembly FASTAs are the files used by the study. '
+        'Sample metadata identify the study genomes. References and five assembly FASTAs are the files used by the study. '
         'Sampling dates retain the original numerical values.\n\n'
         'Prepare inputs with `bash master.sh inputs prepare --data /path/to/Data_for_Zenodo --out /path/to/source_data`. '
         'Download paired reads with `bash master.sh inputs download-reads --source /path/to/source_data`; '

@@ -4,7 +4,7 @@ Analysis code for **Recurrent evolution of penicillin-binding proteins across gl
 
 ## Reproduce the published figures and tables
 
-Download and extract the companion Zenodo data archive. The input directory is `Data_for_Zenodo`; use a new output directory.
+Download and extract the companion Zenodo archive of analytical inputs and results. The input directory is `Data_for_Zenodo`; use a new output directory. Figures, Figure Source Data and formal supplementary tables are generated locally and are not included in the data archive.
 
 ```bash
 bash scripts/setup_environment.sh
@@ -18,7 +18,9 @@ The R workflow regenerates five main figures, four supplementary figures, three 
 
 Figure 5 shows the existing common-ancestor node-date 95% HPD intervals and thin grey guides from sampled tips to their variant-state tracks. The node intervals and guide coordinates are included in the corresponding Source Data.
 
-For a strict comparison with archived figures, use the code commit recorded in `Data_for_Zenodo/RELEASE.json` and add `--compare`. `REPRODUCTION_CHECK.json` then reports numerical and graphical agreement. The current code can also use earlier frozen analytical inputs to generate the updated figure styling.
+The analysis-input archive does not contain reference figures or publication tables, so reproduce it without `--compare`. If a separate reference output directory is available, `bash master.sh compare --reference /path/to/reference_outputs --candidate /path/to/reproduced_outputs` reports numerical and graphical agreement. Earlier archives that contain publication outputs can still use `reproduce --compare` with their matching code commit.
+
+The command creates these output directories:
 
 | Directory | Contents |
 |---|---|

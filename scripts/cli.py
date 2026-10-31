@@ -72,6 +72,9 @@ def main(argv=None):
             data = a.data.resolve()
             if contained(out, data) or contained(data, out):
                 raise ValueError('Keep the output directory separate from the deposited data')
+            if a.compare and not all((data/name).is_dir() for name in ('Figures', 'Figure_Source_Data', 'Supplementary_Tables')):
+                raise ValueError('This archive contains analysis inputs without reference publication outputs. '
+                                 'Run reproduce without --compare; use the compare command with a separate reference output directory if needed.')
             from integrity import verify_data
             print('[VERIFY]', json.dumps(verify_data(data)), flush=True)
             cmd += ['--reuse-run', str(data/'frozen_run')]
