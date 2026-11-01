@@ -42,7 +42,7 @@ Root-to-tip genetic distance versus collection year for the complete dated colle
 
 ## Supplementary Table 1. Genome metadata, amino-acid states and *mrcA* protein types
 
-Sequence accessions, geographical and temporal annotations, lineage assignments, BioProject and BioSample identifiers, source studies, amino-acid states at 42 surveyed positions in *mrcA*, *pbp1*, *tp47*, *lytB* and *pbp2*, and *mrcA* protein types. Each position reports the observed residue or uncallable; the workbook footnotes specify the callability criteria. Protein types that could not be assigned are labelled untyped. Carrier and callable-genome totals are provided for each position.
+Sequence accessions, geographical and temporal annotations, lineage assignments, BioProject and BioSample identifiers, amino-acid states at 42 surveyed positions in *mrcA*, *pbp1*, *tp47*, *lytB* and *pbp2*, and *mrcA* protein types. Each position reports the observed residue or uncallable; the workbook footnotes specify the callability criteria. Protein types that could not be assigned are labelled untyped. Carrier and callable-genome totals are provided for each position.
 
 ## Supplementary Table 2. PBP amino-acid variants and substitution-specific ESM-2 scores
 

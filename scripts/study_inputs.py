@@ -40,7 +40,8 @@ def write_json(path, value):
 
 
 def cohort(metadata):
-    records = rows(metadata)
+    records = [{key: value for key, value in row.items() if key not in ('study', 'source')}
+               for row in rows(metadata)]
     required = {'sample', 'year', 'lineage', 'country'}
     if not records or not required.issubset(records[0]):
         raise ValueError('Use study metadata with sample, year, lineage and country columns')
@@ -79,18 +80,18 @@ def export_metadata(metadata, out, dates=None):
     from openpyxl import Workbook
     records, groups, assemblies = cohort(metadata)
     out.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(metadata, out / 'sample_metadata.tsv')
+    write_tsv(out / 'sample_metadata.tsv', records, list(records[0]))
     book = Workbook()
     sheet = book.active
     sheet.title = 'Metadata'
-    sheet.append(['SRA_ID (Key)', 'Isolation Year', 'Clade (Lineage)', 'Country', 'Source', 'BioProject', 'BioSample'])
+    sheet.append(['SRA_ID (Key)', 'Isolation Year', 'Clade (Lineage)', 'Country', 'BioProject', 'BioSample'])
     date_values = {}
     for r in records:
         value = r['year'].strip()
         year = float(value) if value and value.lower() not in ('na', 'nan') else None
         if year is not None:
             date_values[r['sample']] = year
-        sheet.append([r['sample'], year, r['lineage'], r['country'], r.get('source', ''), r.get('bioproject', ''), r.get('biosample', '')])
+        sheet.append([r['sample'], year, r['lineage'], r['country'], r.get('bioproject', ''), r.get('biosample', '')])
     if dates:
         original = {}
         with Path(dates).open() as handle:

@@ -53,9 +53,6 @@
   "simmap_draws.tsv": [
     "raw_inputs/simmap_draws.tsv"
   ],
-  "source_project_crosswalk.tsv": [
-    "raw_inputs/source_project_crosswalk.tsv"
-  ],
   "strict.tree": [
     "raw_inputs/strict.tree"
   ],

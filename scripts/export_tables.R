@@ -12,8 +12,9 @@ optional<-function(input,name){
  gaps[[length(gaps)+1]]<<-data.frame(table=name,missing_input=input);FALSE
 }
 meta<-read('metadata.tsv');prov<-read('metadata_provenance.tsv');mat<-read('matrix.tsv');hs<-read('haplotype_samples.tsv')
+meta<-meta[,!names(meta)%in%c('study','source'),drop=FALSE]
 meta<-meta[order(meta$sample),];j<-match(meta$sample,prov$sample);stopifnot(!anyNA(j))
-for(k in c('bioproject','biosample','study'))meta[[k]]<-prov[[k]][j]
+for(k in c('bioproject','biosample'))meta[[k]]<-prov[[k]][j]
 meta$included_primary_phylogeny<-TRUE
 for(g in c('mrcA','pbp1','pbp2','tp47'))meta[[paste0('included_',g,'_selection_alignment')]]<-meta$sample%in%readLines(file.path(data,paste0(g,'_ids.txt')))
 for(m in c('strict','relaxed'))meta[[paste0('included_',m,'_dating')]]<-meta$sample%in%ape::read.nexus(file.path(data,paste0(m,'.tree')))$tip.label
@@ -21,7 +22,7 @@ meta$complete_mrcA_sequence<-tolower(as.character(hs$gene_complete_acgt[match(me
 meta$gene_haplotype<-hs$gene_haplotype[match(meta$sample,hs$sample)]
 assignment<-source_table('Fig4C_protein_type_assignments')
 meta$mrcA_protein_type<-assignment$display_type[match(meta$sample,assignment$sample)]
-put(meta,'sample_metadata');put(read('source_project_crosswalk.tsv'),'source_project_crosswalk')
+put(meta,'sample_metadata')
 put(read('coverage.tsv'),'analysis_scope')
 keep<-c('sample',names(mat)[sub(':.*','',names(mat))%in%c('mrcA','pbp1','pbp2','tp47','lytB')])
 matrix_public<-mat[,keep,drop=FALSE]

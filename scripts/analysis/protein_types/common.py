@@ -176,7 +176,6 @@ ALIASES = {
     'year': ['year', 'Isolation Year', 'Sample_Year', 'sampling_year'],
     'lineage': ['lineage', 'Clade (Lineage)', 'TPA_Lineage'],
     'country': ['country', 'Country', 'Geo_Country'],
-    'source': ['source', 'study', 'BioProject', 'bioproject', 'study_accession'],
     'clade': ['clade'],
 }
 
@@ -235,7 +234,7 @@ def normalize_metadata(path, settings):
             entry['year'] = str(numeric)
         else:
             entry['year'] = ''
-        for key in ('country', 'source', 'clade'):
+        for key in ('country', 'clade'):
             if entry[key].upper() in MISSING:
                 entry[key] = ''
         data[sid] = entry

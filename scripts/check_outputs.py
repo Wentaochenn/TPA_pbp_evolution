@@ -73,9 +73,9 @@ def validate_metadata_exports(run):
     if fields != expected_fields or actual != expected_rows:
         raise ValueError('Supplementary Table 1 differs from the audited metadata and codon states')
     if set(fields).intersection(EXCLUDED_COLUMNS):
-        raise ValueError('Removed analysis-membership fields remain in Supplementary Table 1')
-    if len(actual) != 1861 or len(fields) != 54:
-        raise ValueError('Expected 1861 genomes and 54 formal metadata columns')
+        raise ValueError('Excluded fields remain in Supplementary Table 1')
+    if len(actual) != 1861 or len(fields) != 52:
+        raise ValueError('Expected 1861 genomes and 52 formal metadata columns')
 
     path = run / 'Supplementary_Tables/TableS1_sample_metadata.xlsx'
     ns = {'m': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}

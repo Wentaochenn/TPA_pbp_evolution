@@ -35,7 +35,9 @@ class ExistingInputPackagingTests(unittest.TestCase):
                 records.append(dict(sample=row['sample_id'], year='2000', lineage='Nichols', country='Country'))
                 dest = project / row['fasta'];dest.parent.mkdir(parents=True, exist_ok=True);dest.write_text('>reference\nACGT\n')
             metadata = data / metadata_relative
-            inputs.write_tsv(metadata, records, ['sample', 'year', 'lineage', 'country'])
+            for record in records:
+                record.update(study='This study', source='This _Study')
+            inputs.write_tsv(metadata, records, ['sample', 'year', 'lineage', 'country', 'study', 'source'])
             (project / 'sample_dates.tsv').write_text(''.join(r['sample']+'\t2000\n' for r in records))
             for name in ('TPA_SS14.fasta', 'TPA_Nichols.fasta'):
                 dest = project / 'refs' / name;dest.parent.mkdir(exist_ok=True);dest.write_text('>reference\nACGT\n')
@@ -62,6 +64,12 @@ class ExistingInputPackagingTests(unittest.TestCase):
             self.assertEqual(verify_data(extract/'Data_for_Zenodo')['state'], 'PASS')
             self.assertEqual(status['genomes'], 1861)
             self.assertEqual(len(inputs.rows(extract/'Data_for_Zenodo/Upstream_Inputs/sample_metadata.tsv')), 1861)
+            clean_metadata = inputs.rows(extract/'Data_for_Zenodo/Upstream_Inputs/sample_metadata.tsv')
+            self.assertTrue(all(not {'study', 'source'} & set(row) for row in clean_metadata))
+            from openpyxl import load_workbook
+            workbook = load_workbook(extract/'Data_for_Zenodo/Upstream_Inputs/TPA_master_metadata.xlsx', read_only=True)
+            self.assertNotIn('Source', next(workbook.active.values))
+            workbook.close()
             if metadata_relative.startswith('Upstream_Inputs/'):
                 self.assertFalse((extract/'Data_for_Zenodo/Supplementary_Tables').exists())
 

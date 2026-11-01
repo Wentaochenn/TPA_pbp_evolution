@@ -31,6 +31,8 @@ The command creates these output directories:
 
 Supplementary Table 1 contains 1,861 genomes, 42 surveyed amino-acid positions across five genes and `mrcA_protein_type`. Codon states that cannot be resolved are marked `uncallable`; unresolved protein types are marked `untyped`. The workbook includes the callability criteria.
 
+Sample provenance is recorded by sequence accessions, BioProject and BioSample identifiers. Study-relative labels imported from earlier publications are excluded from the metadata exports.
+
 Reference-structure images are checked against the archived model, rendering script and camera settings. Compatible renderings are reused; otherwise the reference PDB is rendered using the specified PyMOL environment and fixed camera. Structure labels are editable Arial text. Add `--rerender-structure` to request a fresh rendering, or use `--pymol-python /path/to/python` for another PyMOL interpreter.
 
 ## Reanalyse the study inputs

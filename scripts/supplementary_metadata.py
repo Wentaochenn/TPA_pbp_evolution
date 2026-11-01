@@ -11,9 +11,10 @@ from pathlib import Path
 
 METADATA_COLUMNS = (
     'sample', 'country', 'continent', 'year', 'lineage', 'bioproject',
-    'biosample', 'study', 'source', 'clade', 'raw_lineage',
+    'biosample', 'clade', 'raw_lineage',
 )
 EXCLUDED_COLUMNS = (
+    'study', 'source',
     'included_primary_phylogeny', 'included_mrcA_selection_alignment',
     'included_pbp1_selection_alignment', 'included_pbp2_selection_alignment',
     'included_tp47_selection_alignment', 'included_strict_dating',

@@ -1,6 +1,5 @@
 part	title	title_zh
 sample_metadata.tsv	Sample metadata and analytical membership	样本元数据与分析纳入情况
-source_project_crosswalk.tsv	Source-project crosswalk	来源研究与项目对应关系
 analysis_scope.tsv	Analysis scope, callability and observed genotypes	分析范围、可判定性与观察基因型
 variant_callability.tsv	Analysis scope, callability and observed genotypes	分析范围、可判定性与观察基因型
 observed_genotypes.tsv	Analysis scope, callability and observed genotypes	分析范围、可判定性与观察基因型

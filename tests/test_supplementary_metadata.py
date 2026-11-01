@@ -75,11 +75,17 @@ class SchemaTests(unittest.TestCase):
     def test_untyped_is_distinct_from_site_uncallable(self):
         metadata, matrix = self.fixture()
         columns, rows, spec = module.build_table([metadata], [matrix], list(matrix))
-        self.assertEqual(len(columns), 54)
+        self.assertEqual(len(columns), 52)
         self.assertEqual(rows[0]['mrcA_protein_type'], 'untyped')
         self.assertEqual(rows[0]['mrcA:A506'], 'A')
         self.assertEqual(spec['protein_types_untyped'], 1)
         self.assertFalse(set(columns) & set(module.EXCLUDED_COLUMNS))
+
+    def test_legacy_study_labels_do_not_change_exported_states(self):
+        metadata, matrix = self.fixture('WT')
+        expected = module.build_table([metadata], [matrix], list(matrix))
+        metadata.update(study='This study', source='This _Study')
+        self.assertEqual(module.build_table([metadata], [matrix], list(matrix)), expected)
 
     def test_one_uncallable_site_does_not_remove_other_states(self):
         metadata, matrix = self.fixture('WT')

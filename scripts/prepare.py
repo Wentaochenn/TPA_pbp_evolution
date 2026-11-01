@@ -40,6 +40,20 @@ def sha(path):
     return h.hexdigest()
 
 
+def clean_metadata(data):
+    """Keep sample annotations independent of imported publication labels."""
+    data = Path(data)
+    for name in ('metadata.tsv', 'metadata_provenance.tsv', 'haplotype_samples.tsv'):
+        path = data / name
+        if not path.is_file():
+            continue
+        records = read(path)
+        if records and {'study', 'source'} & set(records[0]):
+            write(path, [{key: value for key, value in row.items()
+                          if key not in ('study', 'source')} for row in records])
+    (data / 'source_project_crosswalk.tsv').unlink(missing_ok=True)
+
+
 def fasta(path):
     result={};name=None;parts=[]
     for line in Path(path).read_text().splitlines():
@@ -191,7 +205,7 @@ def historical(sources,out):
 def prepare(project,out,extra=(),overrides=None):
     out.mkdir(parents=True,exist_ok=False);data=out/'work/figures/data';data.mkdir(parents=True)
     sources=Sources(project,extra,overrides)
-    required=['matrix.tsv','metadata.tsv','ASR','ESM','mrcA_model.pdb','clock_rates.tsv','dates.tsv','er_ard.tsv','haplotype_lineages.tsv','haplotype_samples.tsv','metadata_provenance.tsv','nucleotide_haplotypes.tsv','parsimony.tsv','primary.treefile','relaxed.tree','relaxed_calibration.tsv','relaxed_origins.tsv','rtt_points.tsv','rtt_summary.tsv','simmap_draws.tsv','source_project_crosswalk.tsv','strict.tree','strict_calibration.tsv','strict_origins.tsv','structural_metrics.tsv','temporal_signal.tsv']
+    required=['matrix.tsv','metadata.tsv','ASR','ESM','mrcA_model.pdb','clock_rates.tsv','dates.tsv','er_ard.tsv','haplotype_lineages.tsv','haplotype_samples.tsv','metadata_provenance.tsv','nucleotide_haplotypes.tsv','parsimony.tsv','primary.treefile','relaxed.tree','relaxed_calibration.tsv','relaxed_origins.tsv','rtt_points.tsv','rtt_summary.tsv','simmap_draws.tsv','strict.tree','strict_calibration.tsv','strict_origins.tsv','structural_metrics.tsv','temporal_signal.tsv']
     required += [g+'_'+ext for g in GENES for ext in ['fubar.json','codon.fasta','ids.txt']]
     missing=[k for k in required if sources.find(k) is None]
     for key in ['TOPOLOGY','TableS12A_clustered_date_tests.tsv','TableS12B_subset_stability.tsv','TableS13B_strict_ESS.tsv','TableS13C_relaxed_ESS.tsv']:sources.find(key,False)
@@ -199,6 +213,7 @@ def prepare(project,out,extra=(),overrides=None):
     if missing:raise ValueError('Required cluster inputs missing; see INPUT_RESOLUTION.tsv: '+', '.join(missing))
     for name,path in sources.used.items():
         if name.endswith(('.tsv','.tree','.treefile','.pdb','.txt')) and '/' not in name:shutil.copyfile(path,data/name)
+    clean_metadata(data)
     matrix=read(data/'matrix.tsv');meta=read(data/'metadata.tsv')
     if len(matrix)!=1861 or len(meta)!=1861 or len({r['sample'] for r in matrix})!=1861 or {r['sample'] for r in matrix}!={r['sample'] for r in meta}:raise ValueError('Study cohort mismatch')
     geo=read(PACKAGE/'config/geography.tsv');lookup={r['Geo_Country'].replace('_',' '):r for r in geo};counts=Counter()

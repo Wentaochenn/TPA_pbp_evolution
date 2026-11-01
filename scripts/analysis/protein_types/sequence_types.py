@@ -83,7 +83,7 @@ def _sequence_outputs(sequences, matrix, metadata, coords, outdir):
     group_counts = defaultdict(Counter)
     hap_counts = Counter()
     for sample in matrix:
-        for field in ("lineage", "country", "source"):
+        for field in ("lineage", "country"):
             group_counts[(field, _group(metadata, sample, field))]["n_matrix_total"] += 1
     for sample, seq in sorted(sequences.items()):
         gene = gene_sequences[sample]
@@ -93,14 +93,13 @@ def _sequence_outputs(sequences, matrix, metadata, coords, outdir):
         lineage = _group(metadata, sample, "lineage")
         row = {"sample": sample, "lineage": lineage,
                "country": _group(metadata, sample, "country"),
-               "source": _group(metadata, sample, "source"),
                "in_matrix": sample in matrix,
                "region_length": len(seq), "region_acgt_called": sum(base in BASES for base in seq),
                "gene_length": gene_length, "gene_acgt_called": n_gene_called,
                "gene_callability": n_gene_called / gene_length,
                "gene_complete_acgt": complete, "gene_haplotype": haplotype}
         rows.append(row)
-        for field in ("lineage", "country", "source"):
+        for field in ("lineage", "country"):
             group_counts[(field, row[field])]["n_alignment"] += 1
             group_counts[(field, row[field])]["n_gene_complete"] += int(complete)
             group_counts[(field, row[field])]["n_incomplete"] += int(not complete)

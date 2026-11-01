@@ -8,7 +8,7 @@ import shutil
 import subprocess
 import sys
 import time
-from prepare import prepare
+from prepare import prepare, clean_metadata
 
 PACKAGE=Path(__file__).resolve().parent
 
@@ -64,6 +64,7 @@ def main():
             frozen=json.loads((previous/'work/INPUT_MANIFEST.json').read_text())
             if not all(sha(data/name)==value for name,value in frozen.items()):
                 raise ValueError('Previous prepared input checksums differ')
+            clean_metadata(data)
             (out/'work/INPUT_MANIFEST.json').write_text(json.dumps({p.name:sha(p) for p in data.iterdir() if p.is_file()},indent=2)+'\n')
             status['prepared_inputs_reused_from']=str(previous)
         else:
